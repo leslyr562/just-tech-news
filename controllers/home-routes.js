@@ -42,8 +42,16 @@ router.get('/', (req, res) => {
 
 //get login
 router.get('/login', (req,res) => {
-  console.log('login')
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
   res.render('login');
 });
+
+// console.logs session variables
+router.get('/', (req, res) => {
+  console.log(req.session)
+})
 
 module.exports = router;
