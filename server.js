@@ -1,12 +1,14 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
+const session = require('express-session');
 
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const hbs = exphbs.create({});
 
@@ -23,6 +25,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('./controllers'));
 
 
+//This code sets up an Express.js session
+const sess = {
+    secret: 'Super secret secret',
+    cookie: {},
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+      db: sequelize
+    })
+  };
+
+
+//This code connects the session to our Sequelize database.
+app.use(session(sess));
 
 //turn on connection to db and server 
 //"sync" part means that this is Sequelize taking the models and connecting them to associated database tables. If it doesn't find a table, it'll create it for you!
