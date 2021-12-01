@@ -5,7 +5,7 @@ const exphbs = require('express-handlebars');
 const helpers = require('./utils/helpers');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 const hbs = exphbs.create({ helpers });
 
 const sequelize = require('./config/connection');
@@ -31,9 +31,14 @@ app.use(session(sess));
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
+
+//express middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
+
 //adding folder through express.static middleware gets connect and serves as static assets
+//built-in Express.js middleware function that can take all of the contents of a folder and 
+//serve them as static assets. This is useful for front-end specific files like images, style sheets, and JavaScript files.
 app.use(express.static(path.join(__dirname, 'public')));
 
 
